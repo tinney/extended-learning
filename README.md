@@ -1,37 +1,17 @@
-## run with: lein repl
-# my-proj
+# Tiny URL Generator
 
-FIXME: description
+Clojure based tiny-url generator, using enlive templates.  
 
 ## Installation
 
-Download from http://example.com/FIXME.
+Install clojure and java, clone the repo and run in the repl. 
 
 ## Usage
 
-FIXME: explanation
+    $ lein repl
 
-    $ java -jar my-proj-0.1.0-standalone.jar [args]
+### Starts the server on localhost:8081
+    $ => (def server (jetty/run-jetty #'app {:port 8081 :join? false}))
 
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
-
-## License
-
-Copyright © 2014 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+### Reloads the project after files change
+    $ => (require 'my-proj.app :reload-all) ;reloads the project
