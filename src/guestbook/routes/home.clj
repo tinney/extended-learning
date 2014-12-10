@@ -1,7 +1,8 @@
 (ns guestbook.routes.home
-  (:require [compojure.core :refer :all]
+(:require [compojure.core :refer :all]
             [guestbook.views.layout :as layout]
-            [hiccup.form :refer :all]))
+            [hiccup.form :refer :all]
+            [guestbook.models.db :as db]))
 
 (defn home [& [name message error]] (layout/common
                                      [:h1 "Guestbook"]
@@ -20,17 +21,21 @@
                                               (submit-button "comment"))))
 
 (defn show-guests [] [:ul.guests
-  (for [{:keys [message name timestamp]}
-        [{:message "Howdy" :name "Bob" :timestamp nil}
-        {:message "Hello" :name "Bob" :timestamp nil}]] [:li
-        [:blockquote message] [:p "-" [:cite name]] [:time timestamp]])])
+  (for [{:keys [message name timestamp]} (db/read-guests)]
+    [:li
+     [:blockquote message]
+     [:p "-" [:cite name]]
+     [:time timestamp]
+    ])
+  ])
+
 
 (defn save-message [name message] (cond
                                    (empty? name)
                                    (home name message "Some dummy forgot to leave a name") (empty? message)
                                    (home name message "Don't you have something to say?") :else
                                    (do
-                                     (println name message) (home))))
+                                     (db/save-message name message) (home))))
 
 (defroutes home-routes
   (GET "/" [] (home))
